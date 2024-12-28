@@ -18,7 +18,7 @@ x_pos = 20
 y_pos = (SCREEN_HEIGHT - SQUARE_SIZE) // 2
 velocity = 0
 
-# Movement direction: 1 for right, -1 for left
+# Movement direction: 1 for right, -1 for left 
 direction = 1
 
 # Main loop
