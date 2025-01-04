@@ -36,7 +36,7 @@ player = pygame.Rect(100, settings.screen_height - settings.player_size, setting
 
 player_y_velocity = 0
 player_x_velocity = 0
-x_direction = 1 # Elther 1 or negative 1, so we can keep track for direction after hitting the ground
+x_direction = 1 # Either 1 or negative 1, so we can keep track for direction after hitting the ground
 
 is_jumping = False
 
