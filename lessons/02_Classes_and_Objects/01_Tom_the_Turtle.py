@@ -49,6 +49,11 @@ class Turtle:
 class turtley(Turtle):
     def __init__(self, screen, x, y):
         super().__init__(screen, x, y)
+
+    def right(self, angle):
+        super().left(-angle)
+
+
 # Main loop
 
 # Initialize Pygame
