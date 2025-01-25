@@ -46,13 +46,15 @@ class Turtle:
         # Turn left by adjusting the angle counterclockwise
         self.angle = (self.angle + angle) % 360
 
-class turtley(Turtle):
-    def __init__(self, screen, x, y):
+class Turtley(Turtle):
+    def __init__(self, screen, x, y, color):
         super().__init__(screen, x, y)
-
+        self.color = color
+    def set_color(self, color):
+        self.color = color
     def right(self, angle):
         super().left(-angle)
-
+    def forward()
 
 # Main loop
 
@@ -69,12 +71,12 @@ white = (255, 255, 255)
 black = (0, 0, 0)
 
 screen.fill(white)
-turtle = Turtle(screen, screen.get_width() // 2, screen.get_height() // 2)  # Start at the center of the screen
+turtle = Turtley(screen, screen.get_width() // 2, screen.get_height() // 2, "red")  # Start at the center of the screen
 
 # Draw a square using turtle-style commands
 for _ in range(4):
     turtle.forward(100)  # Move forward by 100 pixels
-    turtle.left(90)  # Turn left by 90 degrees
+    turtle.right(90)  # Turn left by 90 degrees
 
 # Display the drawing
 pygame.display.flip()
