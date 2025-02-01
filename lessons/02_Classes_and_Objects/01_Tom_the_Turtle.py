@@ -54,7 +54,6 @@ class Turtley(Turtle):
         self.color = color
     def right(self, angle):
         super().left(-angle)
-    def forward()
 
 # Main loop
 
@@ -71,7 +70,7 @@ white = (255, 255, 255)
 black = (0, 0, 0)
 
 screen.fill(white)
-turtle = Turtley(screen, screen.get_width() // 2, screen.get_height() // 2, "red")  # Start at the center of the screen
+turtle = Turtley(screen, screen.get_width() // 2, screen.get_height() // 2, "orange")  # Start at the center of the screen
 
 # Draw a square using turtle-style commands
 for _ in range(4):
