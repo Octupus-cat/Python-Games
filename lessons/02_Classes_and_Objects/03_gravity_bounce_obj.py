@@ -12,7 +12,7 @@ import pygame
 
 class Colors:
     """Constants for Colors"""
-    WHITE = (255, 255, 255)
+    WHITE = (255, 220, 240)
     GREEN = (100, 200, 40)
     PURPLE = (5, 193, 206)
 
