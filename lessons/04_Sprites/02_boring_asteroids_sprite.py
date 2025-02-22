@@ -1,6 +1,8 @@
 import pygame
 import math
+from pathlib import Path
 
+assets = Path(__file__).parent / "images"
 
 class Settings:
     """Class to store game configuration."""
@@ -117,6 +119,10 @@ class Spaceship(pygame.sprite.Sprite):
     # screen. We only need to add the sprite to a group and the group will take
     # care of drawing the sprite.
 
+class AlienSpaceship(Spaceship):
+    
+    def create_spaceship_image(self):
+        return pygame.image.load(assets/"alien1.gif")
         
 
 class Projectile(pygame.sprite.Sprite):
@@ -222,7 +228,7 @@ if __name__ == "__main__":
 
     game = Game(settings)
 
-    spaceship = Spaceship(
+    spaceship = AlienSpaceship(
         settings, position=(settings.width // 2, settings.height // 2)
     )
 

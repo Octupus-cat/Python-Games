@@ -21,8 +21,8 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Dino Jump")
 
 # Colors
-BLUE = (0, 0, 255)
-BLACK = (0, 0, 0)
+BLUE = (10, 75, 30)
+BLACK = (0, 0, 50)
 WHITE = (255, 255, 255)
 
 # FPS
@@ -79,19 +79,22 @@ class Player(pygame.sprite.Sprite):
         self.rect.x = 50
         self.rect.y = HEIGHT - PLAYER_SIZE - 10
         self.speed = player_speed
-
+        self.jumping = False
     def update(self):
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_UP]:
-            self.rect.y -= self.speed
-        if keys[pygame.K_DOWN]:
-            self.rect.y += self.speed
+        self.speed += 1
+        self.rect.y += self.speed
+        if keys[pygame.K_SPACE] and not self.jumping:
+            self.speed = -15
+            self.jumping = True
+
 
         # Keep the player on screen
         if self.rect.top < 0:
             self.rect.top = 0
         if self.rect.bottom > HEIGHT:
             self.rect.bottom = HEIGHT
+            self.jumping = False 
 
 # Create a player object
 player = Player()
