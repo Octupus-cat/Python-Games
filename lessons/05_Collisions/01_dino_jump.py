@@ -21,21 +21,22 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Dino Jump")
 
 # Colors
-BLUE = (10, 75, 30)
+BLUE = (255, 255, 255)
 BLACK = (0, 0, 50)
-WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+WHITE = (0, 200, 250)
 
 # FPS
 FPS = 60
 
 # Player attributes
-PLAYER_SIZE = 25
+PLAYER_SIZE = 10
 
 player_speed = 5
 
 # Obstacle attributes
 OBSTACLE_WIDTH = 20
-OBSTACLE_HEIGHT = 20
+OBSTACLE_HEIGHT = 60
 obstacle_speed = 5
 
 # Font
@@ -47,10 +48,11 @@ class Obstacle(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.image = pygame.Surface((OBSTACLE_WIDTH, OBSTACLE_HEIGHT))
-        self.image.fill(BLACK)
+        self.image = pygame.image.load(images_dir/"cactus_9.png")
+        self.image = pygame.transform.scale(self.image,(OBSTACLE_WIDTH, OBSTACLE_HEIGHT))
         self.rect = self.image.get_rect()
         self.rect.x = WIDTH
-        self.rect.y = HEIGHT - OBSTACLE_HEIGHT - 10
+        self.rect.y = HEIGHT - OBSTACLE_HEIGHT
 
         self.explosion = pygame.image.load(images_dir / "explosion1.gif")
 
@@ -65,16 +67,16 @@ class Obstacle(pygame.sprite.Sprite):
         
         # Load the explosion image
         self.image = self.explosion
-        self.image = pygame.transform.scale(self.image, (OBSTACLE_WIDTH, OBSTACLE_HEIGHT))
+        self.image = pygame.transform.scale(self.image, (OBSTACLE_WIDTH, OBSTACLE_WIDTH))
         self.rect = self.image.get_rect(center=self.rect.center)
+
 
 
 # Define a player class
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.Surface((PLAYER_SIZE, PLAYER_SIZE))
-        self.image.fill(BLUE)
+        self.image = pygame.image.load(images_dir/"dino_0.png")
         self.rect = self.image.get_rect()
         self.rect.x = 50
         self.rect.y = HEIGHT - PLAYER_SIZE - 10
@@ -109,7 +111,7 @@ def add_obstacle(obstacles):
     # The combination of the randomness and the time allows for random
     # obstacles, but not too close together. 
     
-    if random.random() < 0.4:
+    if random.random() < 0.5:
         obstacle = Obstacle()
         obstacles.add(obstacle)
         return 1
@@ -125,9 +127,10 @@ def game_loop():
     # Group for obstacles
     obstacles = pygame.sprite.Group()
 
-    player = Player()
+    #player_group = pygame.sprite.Group()
 
     obstacle_count = 0
+
 
     while not game_over:
         for event in pygame.event.get():
@@ -149,21 +152,29 @@ def game_loop():
         collider = pygame.sprite.spritecollide(player, obstacles, dokill=False)
         if collider:
             collider[0].explode()
+            game_over = True
+
        
         # Draw everything
         screen.fill(WHITE)
-        pygame.draw.rect(screen, BLUE, player)
+        player_group.draw(screen)
         obstacles.draw(screen)
 
         # Display obstacle count
         obstacle_text = font.render(f"Obstacles: {obstacle_count}", True, BLACK)
+        #game_over_text = font.render(f"GAME OVER", ,RED)
         screen.blit(obstacle_text, (10, 10))
 
         pygame.display.update()
         clock.tick(FPS)
 
     # Game over screen
-    screen.fill(WHITE)
+    while game_over:
+        screen.fill(BLUE)
+        game_over_text = font.render(f"GAME OVER!", True, RED)
+        screen.blit(game_over_text,(0,0))
+        pygame.display.update()
+    
 
 if __name__ == "__main__":
     game_loop()
