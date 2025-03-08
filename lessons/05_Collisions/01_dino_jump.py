@@ -131,50 +131,60 @@ def game_loop():
 
     obstacle_count = 0
 
+    game = True
+    while game:
+        while not game_over:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
 
-    while not game_over:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
+            # Update player
+            player.update()
 
-        # Update player
-        player.update()
+            # Add obstacles and update
+            if pygame.time.get_ticks() - last_obstacle_time > 500:
+                last_obstacle_time = pygame.time.get_ticks()
+                obstacle_count += add_obstacle(obstacles)
+            
+            obstacles.update()
 
-        # Add obstacles and update
-        if pygame.time.get_ticks() - last_obstacle_time > 500:
-            last_obstacle_time = pygame.time.get_ticks()
-            obstacle_count += add_obstacle(obstacles)
+            # Check for collisions
+            collider = pygame.sprite.spritecollide(player, obstacles, dokill=False)
+            if collider:
+                collider[0].explode()
+                game_over = True
+
         
-        obstacles.update()
+            # Draw everything
+            screen.fill(WHITE)
+            player_group.draw(screen)
+            obstacles.draw(screen)
 
-        # Check for collisions
-        collider = pygame.sprite.spritecollide(player, obstacles, dokill=False)
-        if collider:
-            collider[0].explode()
-            game_over = True
+            # Display obstacle count
+            obstacle_text = font.render(f"Score: {obstacle_count}", True, BLACK)
+            #game_over_text = font.render(f"GAME OVER", ,RED)
+            screen.blit(obstacle_text, (10, 10))
 
-       
-        # Draw everything
-        screen.fill(WHITE)
-        player_group.draw(screen)
-        obstacles.draw(screen)
-
-        # Display obstacle count
-        obstacle_text = font.render(f"Obstacles: {obstacle_count}", True, BLACK)
-        #game_over_text = font.render(f"GAME OVER", ,RED)
-        screen.blit(obstacle_text, (10, 10))
-
-        pygame.display.update()
-        clock.tick(FPS)
+            pygame.display.update()
+            clock.tick(FPS)
 
     # Game over screen
-    while game_over:
-        screen.fill(BLUE)
-        game_over_text = font.render(f"GAME OVER!", True, RED)
-        screen.blit(game_over_text,(0,0))
-        pygame.display.update()
+        while game_over:
+            screen.fill(BLUE)
+            game_over_text = font.render(f"GAME OVER!", True, RED)
+            screen.blit(game_over_text,(5,0))
+            high_score_text = font.render(f"Final Score: {obstacle_count}", True, RED)
+            screen.blit(high_score_text,(5,50))
+            high_score_text = font.render(f"Click to RESTART.", True, RED)
+            screen.blit(high_score_text,(200,200))
+            if pygame.mouse.get_pressed():
+                x,y = pygame.mouse.set_pos()
+                if x > 5 and y > 5 and x < 5 + 100 and y < 5 + 20:
+                    game = True
+            pygame.display.update()
+            
     
 
-if __name__ == "__main__":
+if __name__ == "__main__": 
     game_loop()
