@@ -133,6 +133,12 @@ def game_loop():
 
     game = True
     while game:
+        obstacles = pygame.sprite.Group()
+
+    #player_group = pygame.sprite.Group()
+
+        obstacle_count = 0
+
         while not game_over:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -176,12 +182,16 @@ def game_loop():
             screen.blit(game_over_text,(5,0))
             high_score_text = font.render(f"Final Score: {obstacle_count}", True, RED)
             screen.blit(high_score_text,(5,50))
-            high_score_text = font.render(f"Click to RESTART.", True, RED)
-            screen.blit(high_score_text,(200,200))
-            if pygame.mouse.get_pressed():
-                x,y = pygame.mouse.set_pos()
-                if x > 5 and y > 5 and x < 5 + 100 and y < 5 + 20:
-                    game = True
+            high_score_text = font.render(f"Click R to restart.", True, RED)
+            screen.blit(high_score_text,(200,200)) 
+            keys = pygame.key.get_pressed()
+            print(keys)
+            print(pygame.key.get_focused())
+            if keys[pygame.K_r]:
+                game = True
+                game_over = False
+                print("its doing the thing")
+            clock.tick(FPS)
             pygame.display.update()
             
     
