@@ -110,6 +110,15 @@ class Spaceship(pygame.sprite.Sprite):
         
         self.rect.center += self.velocity
 
+        if self.rect.bottom > 600:
+            self.rect.top = 1
+        if self.rect.top < 0:
+            self.rect.bottom = 599
+        if self.rect.top < :
+            self.rect.top = 
+        if self.rect.top > :
+            self.rect.top =
+
         # Dont forget this part! If you don't call the Sprite update method, the
         # sprite will not be drawn
         super().update()
@@ -122,7 +131,7 @@ class Spaceship(pygame.sprite.Sprite):
 class AlienSpaceship(Spaceship):
     
     def create_spaceship_image(self):
-        return pygame.image.load(assets/"alien1.gif")
+        return pygame.image.load(assets/"alien2.gif")
         
 
 class Projectile(pygame.sprite.Sprite):
@@ -207,6 +216,8 @@ class Game:
         self.all_sprites.draw(self.screen)
 
         pygame.display.flip()
+
+    
 
     def run(self):
         """Main Loop for the game."""

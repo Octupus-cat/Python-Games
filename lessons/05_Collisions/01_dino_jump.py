@@ -177,6 +177,10 @@ def game_loop():
 
     # Game over screen
         while game_over:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
             screen.fill(BLUE)
             game_over_text = font.render(f"GAME OVER!", True, RED)
             screen.blit(game_over_text,(5,0))
