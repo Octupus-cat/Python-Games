@@ -1,5 +1,6 @@
 import pygame
 import math
+import random
 from pathlib import Path
 
 assets = Path(__file__).parent / "images"
@@ -114,10 +115,10 @@ class Spaceship(pygame.sprite.Sprite):
             self.rect.top = 1
         if self.rect.top < 0:
             self.rect.bottom = 599
-        if self.rect.top < :
-            self.rect.top = 
-        if self.rect.top > :
-            self.rect.top =
+        if self.rect.right > 800:
+            self.rect.left = 1
+        if self.rect.left < 0:
+            self.rect.right = 799
 
         # Dont forget this part! If you don't call the Sprite update method, the
         # sprite will not be drawn
@@ -168,6 +169,17 @@ class Projectile(pygame.sprite.Sprite):
 
     def update(self):
         self.rect.center += self.velocity
+
+class Asteriods(pygame.sprite.Sprite):
+
+     def __init__(self, settings, position):
+        super().__init__()
+
+        self.image = pygame.image.load(assets/"asteriod2.png")
+        self.vec=pygame.Vector2((random.random()*2)-1, (random.random()*2)-1)
+        if pygame.time.get_ticks() - last_obstacle_time > 500:
+            last_obstacle_time = pygame.time.get_ticks()
+            obstacle_count += add_asteroids(Asteriods)
 
 
 class Game:
