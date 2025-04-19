@@ -172,15 +172,15 @@ class Projectile(pygame.sprite.Sprite):
 
 class Asteriods(pygame.sprite.Sprite):
 
-     def __init__(self, settings, position):
+    def __init__(self, settings, position):
         super().__init__()
+        self.settings=settings
 
         self.image = pygame.image.load(assets/"asteriod2.png")
         self.vec=pygame.Vector2((random.random()*2)-1, (random.random()*2)-1)
         if pygame.time.get_ticks() - last_obstacle_time > 500:
             last_obstacle_time = pygame.time.get_ticks()
             obstacle_count += add_asteroids(Asteriods)
-
 
 class Game:
     """Class to manage the game loop and objects."""
