@@ -46,6 +46,12 @@ class Spaceship(pygame.sprite.Sprite):
         # These values help us limit the rate of fire
         self.last_shot = pygame.time.get_ticks()
         self.shoot_delay = self.settings.shoot_delay  
+        self.currentProjectile = Projectile(
+            self.settings,
+            position=self.rect.center,
+            angle=self.angle,
+            velocity=self.settings.projectile_speed,
+        )
 
     def create_spaceship_image(self):
         """Creates the spaceship shape as a surface."""
@@ -78,6 +84,7 @@ class Spaceship(pygame.sprite.Sprite):
 
         # Important! The game will update all of the sprites in the group, so we
         # need to add the projectile to the group to make sure it is updated.
+        self.currentProjectile = new_projectile
         self.game.add(new_projectile)
 
 
@@ -143,7 +150,7 @@ class Projectile(pygame.sprite.Sprite):
 
         self.game = None  # will be set in Game.add()
         self.settings = settings
-
+        
         # The (0,-1) part makes the vector point up, and the rotate method
         # rotates the vector by the given angle. Finally, we multiply the vector
         # by the velocity (scalar) to get the final velocity vector.
@@ -184,12 +191,16 @@ class Asteriods(pygame.sprite.Sprite):
 
     def update(self):
         super().update()
+
+    explode = 
+    #ADD EXPLODE FUNCTION NEXT CLASS 
     
 
 
-def add_asteroids(asteroids):
-    if random.random() < 0.5:
+def add_asteroids(allSprites, asteroids):
+    if random.random() < 0.25:
         asteroid = Asteriods(settings)
+        allSprites.add(asteroid)
         asteroids.add(asteroid)
         return 1
     return 0
@@ -205,15 +216,16 @@ class Game:
         self.screen = pygame.display.set_mode((self.settings.width, self.settings.height))
         
 
-        pygame.display.set_caption("Really Boring Asteroids")
+        pygame.display.set_caption("Asteroids game")
 
         self.clock = pygame.time.Clock()
         self.running = True
 
         self.all_sprites = pygame.sprite.Group()
-
+        self.all_asteroids = pygame.sprite.Group()
         self.last_obstacle_time = 0
         self.obstacle_count = 0
+        self.ship = None
 
     def add(self, sprite):
         """Adds a sprite to the game. Really important! This group is used to
@@ -235,7 +247,7 @@ class Game:
         # of the sprites to the group, so they are updated.
         if pygame.time.get_ticks() - self.last_obstacle_time > 500:
             self.last_obstacle_time = pygame.time.get_ticks()
-            self.obstacle_count += add_asteroids(self.all_sprites)
+            self.obstacle_count += add_asteroids(self.all_sprites, self.all_asteroids)
 
         self.all_sprites.update()
 
@@ -250,6 +262,7 @@ class Game:
 
     
 
+
     def run(self):
         """Main Loop for the game."""
         
@@ -260,7 +273,10 @@ class Game:
             self.update()
             self.draw()
             self.clock.tick(self.settings.fps)
-
+            collider = pygame.sprite.spritecollide(self.ship.currentProjectile, self.all_asteroids, dokill=False)
+            if collider:
+                collider[0].explode() # NO EXPLODE METHOD IN ASTEROID CLASS. FIX ME 
+                game_over = True
         pygame.quit()
 
 
@@ -273,7 +289,7 @@ if __name__ == "__main__":
     spaceship = AlienSpaceship(
         settings, position=(settings.width // 2, settings.height // 2)
     )
-
+    game.ship = spaceship
     game.add(spaceship)
 
     game.run()
