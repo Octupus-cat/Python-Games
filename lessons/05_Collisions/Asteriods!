@@ -5,6 +5,8 @@ from pathlib import Path
 
 assets = Path(__file__).parent / "images"
 
+images_dir = Path(__file__).parent / "images" if (Path(__file__).parent / "images").exists() else Path(__file__).parent / "assets"
+
 class Settings:
     """Class to store game configuration."""
 
@@ -16,7 +18,10 @@ class Settings:
     projectile_size = 11
     shoot_delay = 250  # 250 milliseconds between shots, or 4 shots per second
     colors = {"white": (255, 255, 255), "black": (0, 0, 0), "red": (255, 0, 0)}
+    asteriod_speed = 2
+    OBSTACLE_WIDTH = 400  
 
+settings = Settings()
 
 # Notice that this Spaceship class is a bit different: it is a subclass of
 # Sprite. Rather than a plain class, like in the previous examples, this class
@@ -188,13 +193,27 @@ class Asteriods(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect[0], self.rect[1] = self.vec[0], self.vec[1]
         self.update()
+        self.explosion = pygame.image.load(images_dir / "explosion1.gif")
+
 
     def update(self):
         super().update()
-
-    explode = 
-    #ADD EXPLODE FUNCTION NEXT CLASS 
+#start of copy/pasted section
     
+    def update(self):
+        self.rect.x -= settings.asteriod_speed
+        # Remove the obstacle if it goes off screen
+        if self.rect.right < 0:
+            self.kill()
+
+    def explode(self):
+        """Replace the image with an explosition image."""
+        
+        # Load the explosion image
+        self.image = self.explosion
+        self.image = pygame.transform.scale(self.image, (settings.OBSTACLE_WIDTH, settings.OBSTACLE_WIDTH))
+        self.rect = self.image.get_rect(center=self.rect.center)
+    #end of copy/pasted section
 
 
 def add_asteroids(allSprites, asteroids):
@@ -282,7 +301,7 @@ class Game:
 
 if __name__ == "__main__":
 
-    settings = Settings()
+    
 
     game = Game(settings)
 
