@@ -7,6 +7,8 @@ assets = Path(__file__).parent / "images"
 
 images_dir = Path(__file__).parent / "images" if (Path(__file__).parent / "images").exists() else Path(__file__).parent / "assets"
 
+pygame.init()
+
 class Settings:
     """Class to store game configuration."""
 
@@ -19,9 +21,10 @@ class Settings:
     shoot_delay = 250  # 250 milliseconds between shots, or 4 shots per second
     colors = {"white": (255, 255, 255), "black": (0, 0, 0), "red": (255, 0, 0)}
     asteriod_speed = 2
-    OBSTACLE_WIDTH = 400  
+    OBSTACLE_WIDTH = 150  
 
 settings = Settings()
+font = pygame.font.SysFont(None, 36)
 
 # Notice that this Spaceship class is a bit different: it is a subclass of
 # Sprite. Rather than a plain class, like in the previous examples, this class
@@ -269,10 +272,11 @@ class Game:
             self.obstacle_count += add_asteroids(self.all_sprites, self.all_asteroids)
 
         self.all_sprites.update()
-
+    hlist = ['-' for i in range(player.health)]
     def draw(self):
         self.screen.fill(self.settings.colors["black"])
-
+        obstacle_text = font.render(f"Health:" + {hlist}, True, (10,255,70))
+        self.screen.blit(obstacle_text, (10, 10))
         # The sprite group has a draw method that will draw all of the sprites in
         # the group.
         self.all_sprites.draw(self.screen)
@@ -296,6 +300,7 @@ class Game:
             if collider:
                 collider[0].explode() # NO EXPLODE METHOD IN ASTEROID CLASS. FIX ME 
                 game_over = True
+            
         pygame.quit()
 
 
