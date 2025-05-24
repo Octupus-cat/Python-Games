@@ -272,9 +272,9 @@ class Game:
             self.obstacle_count += add_asteroids(self.all_sprites, self.all_asteroids)
 
         self.all_sprites.update()
-    hlist = ['-' for i in range(player.health)]
     def draw(self):
         self.screen.fill(self.settings.colors["black"])
+        hlist = ['-' for i in range(self.ship.health)]
         obstacle_text = font.render(f"Health:" + {hlist}, True, (10,255,70))
         self.screen.blit(obstacle_text, (10, 10))
         # The sprite group has a draw method that will draw all of the sprites in
@@ -300,6 +300,9 @@ class Game:
             if collider:
                 collider[0].explode() # NO EXPLODE METHOD IN ASTEROID CLASS. FIX ME 
                 game_over = True
+            collider2 = pygame.sprite.spritecollide(self.ship.spaceship, self.all_asteroids, dokill=False)
+            if collider2:
+                #health decreases by 1
             
         pygame.quit()
 
