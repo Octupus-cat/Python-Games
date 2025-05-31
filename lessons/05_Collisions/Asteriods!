@@ -298,8 +298,9 @@ class Game:
             self.clock.tick(self.settings.fps)
             collider = pygame.sprite.spritecollide(self.ship.currentProjectile, self.all_asteroids, dokill=False)
             if collider:
-                collider[0].explode() # NO EXPLODE METHOD IN ASTEROID CLASS. FIX ME 
+                collider[0].explode() 
                 game_over = True
+                Score =+ 1 #add scoring
             collider2 = pygame.sprite.spritecollide(self.ship, self.all_asteroids, dokill=False)
             if collider2:
                 if collider2[0].activeify == True:
