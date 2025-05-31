@@ -39,6 +39,8 @@ class Spaceship(pygame.sprite.Sprite):
 
         self.game = None  # will be set in Game.add()
         self.settings = settings
+        
+        self.health = 10
 
         self.angle = 0
         self.original_image = self.create_spaceship_image()
@@ -197,11 +199,8 @@ class Asteriods(pygame.sprite.Sprite):
         self.rect[0], self.rect[1] = self.vec[0], self.vec[1]
         self.update()
         self.explosion = pygame.image.load(images_dir / "explosion1.gif")
+        self.activeify = True
 
-
-    def update(self):
-        super().update()
-#start of copy/pasted section
     
     def update(self):
         self.rect.x -= settings.asteriod_speed
@@ -216,6 +215,7 @@ class Asteriods(pygame.sprite.Sprite):
         self.image = self.explosion
         self.image = pygame.transform.scale(self.image, (settings.OBSTACLE_WIDTH, settings.OBSTACLE_WIDTH))
         self.rect = self.image.get_rect(center=self.rect.center)
+        self.activeify = False
     #end of copy/pasted section
 
 
@@ -275,7 +275,7 @@ class Game:
     def draw(self):
         self.screen.fill(self.settings.colors["black"])
         hlist = ['-' for i in range(self.ship.health)]
-        obstacle_text = font.render(f"Health:" + {hlist}, True, (10,255,70))
+        obstacle_text = font.render(f"Health: {''.join(hlist)}", True, (10,255,70))
         self.screen.blit(obstacle_text, (10, 10))
         # The sprite group has a draw method that will draw all of the sprites in
         # the group.
@@ -300,8 +300,17 @@ class Game:
             if collider:
                 collider[0].explode() # NO EXPLODE METHOD IN ASTEROID CLASS. FIX ME 
                 game_over = True
-            collider2 = pygame.sprite.spritecollide(self.ship.spaceship, self.all_asteroids, dokill=False)
+            collider2 = pygame.sprite.spritecollide(self.ship, self.all_asteroids, dokill=False)
             if collider2:
+                if collider2[0].activeify == True:
+                    self.ship.health -= 1
+                collider2[0].explode() 
+                print("bob")
+
+            if self.ship.health < 1:
+                print("GAME OVER.")
+                game.over 
+
                 #health decreases by 1
             
         pygame.quit()
