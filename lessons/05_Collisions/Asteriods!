@@ -183,6 +183,8 @@ class Projectile(pygame.sprite.Sprite):
 
         # Notice that we are using the rect attribute to store the position of the projectile
         self.rect = self.image.get_rect(center=position)
+        
+
 
     def update(self):
         self.rect.center += self.velocity
@@ -194,16 +196,42 @@ class Asteriods(pygame.sprite.Sprite):
         self.settings=settings
 
         self.image = pygame.image.load(assets/"asteroid2.png")
+        self.image = pygame.transform.scale(self.image,(100, 100))
         self.vec=pygame.Vector2(random.randint(0,600), random.randint(0,600))
         self.rect = self.image.get_rect()
         self.rect[0], self.rect[1] = self.vec[0], self.vec[1]
-        self.update()
+
         self.explosion = pygame.image.load(images_dir / "explosion1.gif")
         self.activeify = True
+        self.vel = pygame.Vector2(settings.asteriod_speed, 0)
 
-    
+        
+
+
+
     def update(self):
-        self.rect.x -= settings.asteriod_speed
+        if self.activeify:
+            self.vel = pygame.Vector2.rotate(self.vel, random.randint(-6,6))
+        if self.activeify:
+            if self.rect.bottom > 600:
+                self.rect.top = 1
+            if self.rect.top < 0:
+                self.rect.bottom = 599
+            if self.rect.right > 800:
+                self.rect.left = 1
+            if self.rect.left < 0:
+                self.rect.right = 799
+        else:
+            if self.rect.bottom > 600:
+                self.kill()
+            if self.rect.top < 0:
+                self.kill()
+            if self.rect.right > 800:
+                self.kill()
+            if self.rect.left < 0:
+                self.kill()           
+            
+        self.rect.center -= self.vel
         # Remove the obstacle if it goes off screen
         if self.rect.right < 0:
             self.kill()
@@ -226,6 +254,7 @@ def add_asteroids(allSprites, asteroids):
         asteroids.add(asteroid)
         return 1
     return 0
+
 
 class Game:
     """Class to manage the game loop and objects."""
@@ -272,11 +301,15 @@ class Game:
             self.obstacle_count += add_asteroids(self.all_sprites, self.all_asteroids)
 
         self.all_sprites.update()
+
     def draw(self):
         self.screen.fill(self.settings.colors["black"])
         hlist = ['-' for i in range(self.ship.health)]
         obstacle_text = font.render(f"Health: {''.join(hlist)}", True, (10,255,70))
         self.screen.blit(obstacle_text, (10, 10))
+        score = 0
+        score_text = font.render(f"Score: {score}", True, (10,255,70))
+        self.screen.blit(score_text, (10, 40))
         # The sprite group has a draw method that will draw all of the sprites in
         # the group.
         self.all_sprites.draw(self.screen)
@@ -298,9 +331,8 @@ class Game:
             self.clock.tick(self.settings.fps)
             collider = pygame.sprite.spritecollide(self.ship.currentProjectile, self.all_asteroids, dokill=False)
             if collider:
-                collider[0].explode() 
-                game_over = True
-                Score =+ 1 #add scoring
+                collider[0].explode()
+                score =+ 1 #add scoring
             collider2 = pygame.sprite.spritecollide(self.ship, self.all_asteroids, dokill=False)
             if collider2:
                 if collider2[0].activeify == True:
@@ -310,10 +342,15 @@ class Game:
 
             if self.ship.health < 1:
                 print("GAME OVER.")
-                game.over 
+                self.running = False
+
+        while self.running == False:
+            ...
 
                 #health decreases by 1
-            
+         
+
+
         pygame.quit()
 
 
