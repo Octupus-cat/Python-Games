@@ -9,7 +9,7 @@ images_dir = Path(__file__).parent / "images" if (Path(__file__).parent / "image
 
 pygame.init()
 
-class Settings:
+class Settings:  
     """Class to store game configuration."""
 
     width = 800
@@ -277,6 +277,7 @@ class Game:
         self.last_obstacle_time = 0
         self.obstacle_count = 0
         self.ship = None
+        self.score = 0
 
     def add(self, sprite):
         """Adds a sprite to the game. Really important! This group is used to
@@ -307,8 +308,7 @@ class Game:
         hlist = ['-' for i in range(self.ship.health)]
         obstacle_text = font.render(f"Health: {''.join(hlist)}", True, (10,255,70))
         self.screen.blit(obstacle_text, (10, 10))
-        score = 0
-        score_text = font.render(f"Score: {score}", True, (10,255,70))
+        score_text = font.render(f"Score: {self.score}", True, (10,255,70))
         self.screen.blit(score_text, (10, 40))
         # The sprite group has a draw method that will draw all of the sprites in
         # the group.
@@ -332,13 +332,12 @@ class Game:
             collider = pygame.sprite.spritecollide(self.ship.currentProjectile, self.all_asteroids, dokill=False)
             if collider:
                 collider[0].explode()
-                score =+ 1 #add scoring
+                self.score += 1 #add scoring
             collider2 = pygame.sprite.spritecollide(self.ship, self.all_asteroids, dokill=False)
             if collider2:
                 if collider2[0].activeify == True:
                     self.ship.health -= 1
                 collider2[0].explode() 
-                print("bob")
 
             if self.ship.health < 1:
                 print("GAME OVER.")
