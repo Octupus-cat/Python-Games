@@ -111,7 +111,7 @@ def add_obstacle(obstacles):
     # The combination of the randomness and the time allows for random
     # obstacles, but not too close together. 
     
-    if random.random() < 0.5:
+    if random.random() < 0.25:
         obstacle = Obstacle()
         obstacles.add(obstacle)
         return 1
@@ -194,7 +194,6 @@ def game_loop():
             if keys[pygame.K_r]:
                 game = True
                 game_over = False
-                print("its doing the thing")
             clock.tick(FPS)
             pygame.display.update()
             

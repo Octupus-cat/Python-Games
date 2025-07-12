@@ -18,7 +18,7 @@ class Settings:
     triangle_size = 20
     projectile_speed = 5
     projectile_size = 11
-    shoot_delay = 250  # 250 milliseconds between shots, or 4 shots per second
+    shoot_delay = 200  # 250 milliseconds between shots, or 4 shots per second
     colors = {"white": (255, 255, 255), "black": (0, 0, 0), "red": (255, 0, 0)}
     asteriod_speed = 2
     OBSTACLE_WIDTH = 150  
@@ -340,7 +340,13 @@ class Game:
                 collider2[0].explode() 
 
             if self.ship.health < 1:
-                print("GAME OVER.")
+                final_text = font.render(f"GAME OVER. Final score: {self.score}.", True, (255,0,0))
+                self.screen.blit(final_text, (100, 100))
+                print(f"GAME OVER. Final Score: {self.score}.")
+
+                self.all_sprites.draw(self.screen)
+                pygame.display.flip()
+
                 self.running = False
 
         while self.running == False:

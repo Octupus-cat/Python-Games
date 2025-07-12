@@ -17,6 +17,9 @@ screen_height = 600
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('Tiled Background')
 
+#heigt 600, width 100
+#draw colored rectangles
+
 def make_tiled_bg(screen, bg_file):
     # Scale background to match the screen height
     
