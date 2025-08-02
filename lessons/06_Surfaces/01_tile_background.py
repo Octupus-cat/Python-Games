@@ -40,6 +40,13 @@ def make_tiled_bg(screen, bg_file):
         
     return image
 
+def make_color_tiles(screen):
+    
+    background_height = screen.get_height()
+    background_width = bg_tile.get_width()
+    bg_tile = #make rectangles with size as background_height by background_width.
+
+
 background = make_tiled_bg(screen, assets/'background_tile.gif')
 
 # Main loop
