@@ -4,7 +4,7 @@ tiling it to fill the screen.
 
 """
 import pygame
-
+import random
 # Initialize Pygame
 pygame.init()
 
@@ -14,6 +14,7 @@ assets = Path(__file__).parent / 'images'
 # Set up display
 screen_width = 600
 screen_height = 600
+BLACK = 0,0,0
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('Tiled Background')
 
@@ -43,12 +44,21 @@ def make_tiled_bg(screen, bg_file):
 def make_color_tiles(screen):
     
     background_height = screen.get_height()
-    background_width = bg_tile.get_width()
-    bg_tile = #make rectangles with size as background_height by background_width.
 
+    # Get the dimensions of the background after scaling
+    background_width = 51
+
+    # Make an image the is the same size as the screen
+    image = pygame.Surface((screen.get_width(), screen.get_height()))
+
+    # Tile the background image in the x-direction
+    for x in range(0, screen.get_width(), background_width):
+        pygame.draw.rect(image, (random.randint(0,255),random.randint(0,255),random.randint(0,255)), (x, 0, background_width, background_height))
+        
+    return image  
 
 background = make_tiled_bg(screen, assets/'background_tile.gif')
-
+background = make_color_tiles(screen)
 # Main loop
 running = True
 while running:
@@ -57,8 +67,8 @@ while running:
             running = False
 
     screen.blit(background,(0,0))
-
-    # Update the display
+    #pygame.draw.rect(screen, BLACK, color_tile)
+    #Update the display
     pygame.display.flip()
 
 # Quit Pygame
