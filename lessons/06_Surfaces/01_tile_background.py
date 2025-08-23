@@ -46,7 +46,7 @@ def make_color_tiles(screen):
     background_height = screen.get_height()
 
     # Get the dimensions of the background after scaling
-    background_width = 51
+    background_width = 87
 
     # Make an image the is the same size as the screen
     image = pygame.Surface((screen.get_width(), screen.get_height()))
