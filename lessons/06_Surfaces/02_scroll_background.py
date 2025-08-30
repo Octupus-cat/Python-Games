@@ -14,6 +14,9 @@ d = Path(__file__).parent # The directory that holds the script
 # Initialize Pygame
 pygame.init()
 
+
+font = pygame.font.SysFont(None, 40, False, False)
+
 class Settings:
     """A class to store all settings for the game."""
     SCREEN_WIDTH = 800
@@ -38,10 +41,14 @@ class Background(pygame.sprite.Sprite):
         # This converts the form of the image to be more efficient. 
         orig_image= pygame.image.load(d/'images/background_scroll.png').convert()
         orig_image = pygame.transform.scale(orig_image, (Settings.SCREEN_WIDTH, Settings.SCREEN_HEIGHT))
-        
+        text_1 = font.render(f"BG 1", True, (0,0,0))
+        text_2 = font.render(f"BG 2", True, (0,0,0))
+
         # Then, copy it into the self.image surface twice
         self.image.blit(orig_image, (0, 0))
+        self.image.blit(text_1, (0,0))
         self.image.blit(orig_image, (Settings.SCREEN_WIDTH, 0))
+        self.image.blit(text_2, (Settings.SCREEN_WIDTH,0))
         
         self.rect = self.image.get_rect()
         self.rect.x = 0
