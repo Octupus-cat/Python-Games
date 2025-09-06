@@ -1,3 +1,6 @@
+#next class I need to take all the scattered code used to make the frog and put that into a frog class that I will make.
+#I will do the same for the aligator thing and then "animate" them, whatever that means 
+
 import pygame
 from jtlgames.spritesheet import SpriteSheet
 from pathlib import Path
