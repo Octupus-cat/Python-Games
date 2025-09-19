@@ -8,7 +8,11 @@ from pathlib import Path
 images = Path(__file__).parent / 'images'
 
 #Frog class here
-
+class Frog(pygame.sprite.Sprite):
+     def __init__(self):
+        super().__init__()
+        #slef.image
+        #self.rect
 def scale_sprites(sprites, scale):
     """Scale a list of sprites by a given factor.
 
@@ -91,6 +95,8 @@ def main():
 
         
         screen.blit(frog_sprites[frog_index], sprite_rect)
+        # TODO:
+        # frog_group.draw(screen)
 
         composed_alligator = draw_alligator(allig_sprites, allig_index)
         screen.blit(composed_alligator,  sprite_rect.move(0, 100))
