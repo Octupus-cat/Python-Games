@@ -1,6 +1,9 @@
 #next class I need to take all the scattered code used to make the frog and put that into a frog class that I will make.
 #I will do the same for the aligator thing and then "animate" them, whatever that means 
 
+#i started on this but need to keep working next week 
+
+
 import pygame
 from jtlgames.spritesheet import SpriteSheet
 from pathlib import Path
@@ -9,10 +12,19 @@ images = Path(__file__).parent / 'images'
 
 #Frog class here
 class Frog(pygame.sprite.Sprite):
-     def __init__(self):
+    def __init__(self):
         super().__init__()
+        self.frog_index = 0
+        spritesheet = SpriteSheet(filename, cellsize)
+        frog_sprites = scale_sprites(spritesheet.load_strip(0, 4, colorkey=-1) , 4)
+        sprite_rect = frog_sprites[0].get_rect(center=(screen.get_width() // 2, screen.get_height() // 2))
+
         #slef.image
         #self.rect
+    def update():
+        frog_index = (frog_index + 1) % len(frog_sprites)
+        screen.blit(frog_sprites[frog_index], sprite_rect)
+
 def scale_sprites(sprites, scale):
     """Scale a list of sprites by a given factor.
 
@@ -39,7 +51,6 @@ def main():
     spritesheet = SpriteSheet(filename, cellsize)
 
     # Load a strip sprites
-    frog_sprites = scale_sprites(spritesheet.load_strip(0, 4, colorkey=-1) , 4)
     allig_sprites = scale_sprites(spritesheet.load_strip( (0,4), 7, colorkey=-1), 4)
 
     # Compose an image
@@ -55,7 +66,6 @@ def main():
     # Main game loop
     running = True
     
-    sprite_rect = frog_sprites[0].get_rect(center=(screen.get_width() // 2, screen.get_height() // 2))
     
     pygame.math.Vector2(1, 0)
     def draw_alligator(alligator, index):
@@ -94,7 +104,6 @@ def main():
         # Get the current sprite and display it in the middle of the screen
 
         
-        screen.blit(frog_sprites[frog_index], sprite_rect)
         # TODO:
         # frog_group.draw(screen)
 
