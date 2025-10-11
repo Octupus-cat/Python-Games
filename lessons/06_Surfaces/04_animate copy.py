@@ -9,6 +9,9 @@ from jtlgames.spritesheet import SpriteSheet
 from pathlib import Path
 
 images = Path(__file__).parent / 'images'
+filename = images / 'spritesheet.png'  # Replace with your actual file path
+cellsize = (16, 16)  # Replace with the size of your sprites
+spritesheet = SpriteSheet(filename, cellsize)
 
 #Frog class here
 class Frog(pygame.sprite.Sprite):
@@ -16,24 +19,30 @@ class Frog(pygame.sprite.Sprite):
         super().__init__()
         self.frog_index = 0
         spritesheet = SpriteSheet(filename, cellsize)
-        frog_sprites = scale_sprites(spritesheet.load_strip(0, 4, colorkey=-1) , 4)
-        sprite_rect = frog_sprites[0].get_rect(center=(screen.get_width() // 2, screen.get_height() // 2))
-
-        frog_index = 0
+        self.frog_sprites = scale_sprites(spritesheet.load_strip(0, 4, colorkey=-1) , 4)
+        self.image = self.frog_sprites[0]
+        self.rect = self.frog_sprites[0].get_rect(center=(400, 300))
+        self.frames_per_image = 20
+        self.frog_index = 0
         #slef.image
         #self.rect
-    def update():
-        frog_index = (frog_index + 1) % len(frog_sprites)
-        screen.blit(frog_sprites[frog_index], sprite_rect)
-
-        if frame_count % frames_per_image == 0: 
-            frog_index = (frog_index + 1) % len(frog_sprites)
+    def update(self):
+        if pygame.time.get_ticks() % self.frames_per_image == 0: 
+            self.frog_index = (self.frog_index + 1) % len(self.frog_sprites)
+            self.image = self.frog_sprites[self.frog_index]
+            
 
 class Aligator(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
 
 #. work on this next class
+
+class Alligator(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+
+    # to do: add all the aligator stuff to this class!!!
 
 def scale_sprites(sprites, scale):
     """Scale a list of sprites by a given factor.
@@ -56,10 +65,8 @@ def main():
     pygame.display.set_caption("Sprite Animation Test")
 
     # Load the sprite sheet
-    filename = images / 'spritesheet.png'  # Replace with your actual file path
-    cellsize = (16, 16)  # Replace with the size of your sprites
     spritesheet = SpriteSheet(filename, cellsize)
-
+    
     # Load a strip sprites
     allig_sprites = scale_sprites(spritesheet.load_strip( (0,4), 7, colorkey=-1), 4)
 
@@ -100,6 +107,9 @@ def main():
 
         return composed_image
     
+    sprite_rect = pygame.Rect((screen.get_width() // 2, screen.get_height() // 2), (1,1))
+    frog = Frog()
+    frog_group = pygame.sprite.GroupSingle(frog)
     while running:
         screen.fill((0, 0, 139))  # Clear screen with deep blue
 
@@ -111,7 +121,8 @@ def main():
         
         # Get the current sprite and display it in the middle of the screen
 
-
+        frog.update()
+        frog_group.draw(screen)
 
         composed_alligator = draw_alligator(allig_sprites, allig_index)
         screen.blit(composed_alligator,  sprite_rect.move(0, 100))
