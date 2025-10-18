@@ -21,12 +21,13 @@ class Frog(pygame.sprite.Sprite):
         spritesheet = SpriteSheet(filename, cellsize)
         self.frog_sprites = scale_sprites(spritesheet.load_strip(0, 4, colorkey=-1) , 4)
         self.image = self.frog_sprites[0]
-        self.rect = self.frog_sprites[0].get_rect(center=(400, 300))
-        self.frames_per_image = 20
+        self.rect = self.frog_sprites[0].get_rect(center=(100, 100))
+        self.frames_per_image = 100
         self.frog_index = 0
         #slef.image
         #self.rect
     def update(self):
+        print(pygame.time.get_ticks() % self.frames_per_image)
         if pygame.time.get_ticks() % self.frames_per_image == 0: 
             self.frog_index = (self.frog_index + 1) % len(self.frog_sprites)
             self.image = self.frog_sprites[self.frog_index]
@@ -39,9 +40,38 @@ class Aligator(pygame.sprite.Sprite):
 #. work on this next class
 
 class Alligator(pygame.sprite.Sprite):
+    #blerrg
+    #I need to keep working on this next time, but i brouhgt everything in here already
     def __init__(self):
         super().__init__()
+        allig_sprites = scale_sprites(spritesheet.load_strip( (0,4), 7, colorkey=-1), 4)
+        allig_index = 0
+        frame_count += 1
+        
+        if frame_count % frames_per_image == 0: 
+            allig_index = (allig_index + 1) % len(allig_sprites)
+    def draw_alligator(alligator, index):
+        """Creates a composed image of the alligator sprites.
 
+        Args:
+            alligator (list): List of alligator sprites.
+            index (int): Index value to determine the right side sprite.
+
+        Returns:
+            pygame.Surface: Composed image of the alligator.
+        """
+        
+        index = index % (len(alligator)-2)
+        
+        width = alligator[0].get_width()
+        height = alligator[0].get_height()
+        composed_image = pygame.Surface((width * 3, height), pygame.SRCALPHA)
+
+        composed_image.blit(alligator[0], (0, 0))
+        composed_image.blit(alligator[1], (width, 0))
+        composed_image.blit(alligator[(index + 2) % len(alligator)], (width * 2, 0))
+
+        return composed_image
     # to do: add all the aligator stuff to this class!!!
 
 def scale_sprites(sprites, scale):
@@ -68,44 +98,19 @@ def main():
     spritesheet = SpriteSheet(filename, cellsize)
     
     # Load a strip sprites
-    allig_sprites = scale_sprites(spritesheet.load_strip( (0,4), 7, colorkey=-1), 4)
 
     # Compose an image
     log = spritesheet.compose_horiz([24, 25, 26], colorkey=-1)
     log = pygame.transform.scale(log, (log.get_width() * 4, log.get_height() * 4))
 
     # Variables for animation
-    allig_index = 0
+
     frames_per_image = 6
     frame_count = 0
 
     # Main game loop
     running = True
     
-    
-    pygame.math.Vector2(1, 0)
-    def draw_alligator(alligator, index):
-        """Creates a composed image of the alligator sprites.
-
-        Args:
-            alligator (list): List of alligator sprites.
-            index (int): Index value to determine the right side sprite.
-
-        Returns:
-            pygame.Surface: Composed image of the alligator.
-        """
-        
-        index = index % (len(alligator)-2)
-        
-        width = alligator[0].get_width()
-        height = alligator[0].get_height()
-        composed_image = pygame.Surface((width * 3, height), pygame.SRCALPHA)
-
-        composed_image.blit(alligator[0], (0, 0))
-        composed_image.blit(alligator[1], (width, 0))
-        composed_image.blit(alligator[(index + 2) % len(alligator)], (width * 2, 0))
-
-        return composed_image
     
     sprite_rect = pygame.Rect((screen.get_width() // 2, screen.get_height() // 2), (1,1))
     frog = Frog()
@@ -114,10 +119,7 @@ def main():
         screen.fill((0, 0, 139))  # Clear screen with deep blue
 
         # Update animation every few frames
-        frame_count += 1
-        
-        if frame_count % frames_per_image == 0: 
-            allig_index = (allig_index + 1) % len(allig_sprites)
+
         
         # Get the current sprite and display it in the middle of the screen
 
