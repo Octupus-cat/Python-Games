@@ -1,8 +1,3 @@
-#next class I need to take all the scattered code used to make the frog and put that into a frog class that I will make.
-#I will do the same for the aligator thing and then "animate" them, whatever that means 
-
-#i started on this but need to keep working next week 
-
 
 import pygame
 from jtlgames.spritesheet import SpriteSheet
@@ -22,14 +17,14 @@ class Frog(pygame.sprite.Sprite):
         self.frog_sprites = scale_sprites(spritesheet.load_strip(0, 4, colorkey=-1) , 4)
         self.image = self.frog_sprites[0]
         self.rect = self.frog_sprites[0].get_rect(center=(100, 100))
-        self.frames_per_image = 5
-        self.frog_index = 0
+        self.last_frame = 0
         #slef.image
         #self.rect
     def update(self):
-        if pygame.time.get_ticks() % self.frames_per_image == 0: 
+        if pygame.time.get_ticks() - self.last_frame > 200: 
             self.frog_index = (self.frog_index + 1) % len(self.frog_sprites)
             self.image = self.frog_sprites[self.frog_index]
+            self.last_frame = pygame.time.get_ticks()
 
 #. work on this next class
 
@@ -37,6 +32,7 @@ class Alligator(pygame.sprite.Sprite):
     #I need to keep working on this next time, but i brouhgt everything in here already
     def __init__(self):
         super().__init__()
+        self.index = 0
         self.allig_sprites = scale_sprites(spritesheet.load_strip( (0,4), 7, colorkey=-1), 4)
         self.allig_index = 0
         self.frame_count = 1
@@ -55,7 +51,7 @@ class Alligator(pygame.sprite.Sprite):
             pygame.Surface: Composed image of the alligator.
         """
         
-        index = index % (len(alligator)-2)
+        self.index = self.index % (len(alligator)-2)
         
         width = alligator[0].get_width()
         height = alligator[0].get_height()
@@ -65,7 +61,7 @@ class Alligator(pygame.sprite.Sprite):
         composed_image.blit(alligator[1], (width, 0))
         composed_image.blit(alligator[(index + 2) % len(alligator)], (width * 2, 0))
 
-        return composed_image
+        self.image = composed_image
     # to do: add all the aligator stuff to this class!!!
 
 def scale_sprites(sprites, scale):
@@ -110,6 +106,7 @@ def main():
     frog = Frog()
     alligator = Alligator()
     frog_group = pygame.sprite.GroupSingle(frog)
+    allig_group = pygame.sprite.GroupSingle(alligator)
     while running:
         screen.fill((0, 0, 139))  # Clear screen with deep blue
 
@@ -122,6 +119,7 @@ def main():
         frog_group.draw(screen)
 
         composed_alligator = alligator.draw_alligator(alligator.allig_sprites, alligator.allig_index)
+        #its compaining about this bit
         screen.blit(composed_alligator,  sprite_rect.move(0, 100))
 
         screen.blit(log,  sprite_rect.move(0, -100))
@@ -140,6 +138,13 @@ def main():
 
     # Quit Pygame
     pygame.quit()
+
+### Might not work, might be in wrong place
+    collider = pygame.sprite.spritecollide(Frog, Alligator, dokill=False)
+    if collider:
+        collider[0].explode()
+        game_over = True
+### Might be totally wrong
 
 if __name__ == "__main__":
     main()
