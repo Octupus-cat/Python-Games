@@ -2,6 +2,7 @@
 import pygame
 from jtlgames.spritesheet import SpriteSheet
 from pathlib import Path
+import math
 
 images = Path(__file__).parent / 'images'
 filename = images / 'spritesheet.png'  # Replace with your actual file path
@@ -9,7 +10,7 @@ cellsize = (16, 16)  # Replace with the size of your sprites
 spritesheet = SpriteSheet(filename, cellsize)
 
 #Frog class here
-class Frog(pygame.sprite.Sprite):
+class Frog(pygame.sprite.Sprite,):
     def __init__(self):
         super().__init__()
         self.frog_index = 0
@@ -18,6 +19,8 @@ class Frog(pygame.sprite.Sprite):
         self.image = self.frog_sprites[0]
         self.rect = self.frog_sprites[0].get_rect(center=(100, 100))
         self.last_frame = 0
+        self.direction_vector = pygame.math.Vector2(100, 0)  # Initial direction vector
+        self.position = pygame.math.Vector2()
         #slef.image
         #self.rect
     def update(self):
@@ -62,6 +65,7 @@ class Alligator(pygame.sprite.Sprite):
         composed_image.blit(alligator[(index + 2) % len(alligator)], (width * 2, 0))
 
         self.image = composed_image
+        return composed_image
     # to do: add all the aligator stuff to this class!!!
 
 def scale_sprites(sprites, scale):
@@ -114,12 +118,12 @@ def main():
 
         
         # Get the current sprite and display it in the middle of the screen
-
+        pygame.draw.line(screen, (0, 0, 120), frog.position, (100, 2))
+        #it's complaining about the '100,' dunno how to fix
         frog.update()
         frog_group.draw(screen)
 
         composed_alligator = alligator.draw_alligator(alligator.allig_sprites, alligator.allig_index)
-        #its compaining about this bit
         screen.blit(composed_alligator,  sprite_rect.move(0, 100))
 
         screen.blit(log,  sprite_rect.move(0, -100))
@@ -130,9 +134,14 @@ def main():
 
         # Handle events
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
 
+            if event.type == pygame.QUIT:
+                    running = False
+        #arrow key movemnt to go here
+        keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_UP]:
+            frog.direction_vector = frog.direction_vector.rotate(3)
         # Cap the frame rate
         pygame.time.Clock().tick(60)
 
