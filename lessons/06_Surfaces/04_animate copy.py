@@ -127,6 +127,7 @@ def main():
         screen.blit(composed_alligator,  sprite_rect.move(0, 100))
 
         screen.blit(log,  sprite_rect.move(0, -100))
+        pygame.draw.line(screen, (52, 137, 235), (frog.rect.x, frog.rect.y), (frog.rect.x + frog.direction_vector[0], frog.rect.y + frog.direction_vector[1]), 2)
 
 
         # Update the display
@@ -140,8 +141,19 @@ def main():
         #arrow key movemnt to go here
         keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_UP]:
+        if keys[pygame.K_LEFT]:
+            frog.direction_vector = frog.direction_vector.rotate(-3)
+        elif keys[pygame.K_RIGHT]:
             frog.direction_vector = frog.direction_vector.rotate(3)
+        elif keys[pygame.K_DOWN]:
+            frog.direction_vector.scale_to_length(frog.direction_vector.length()-1.0)
+        elif keys[pygame.K_UP]:
+            frog.direction_vector.scale_to_length(frog.direction_vector.length()+1.0)
+        elif keys[pygame.K_SPACE]:
+            frog.rect.x += frog.direction_vector[0]
+            frog.rect.y += frog.direction_vector[1]
+
+
         # Cap the frame rate
         pygame.time.Clock().tick(60)
 
