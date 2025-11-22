@@ -21,10 +21,10 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Dino Jump")
 
 # Colors
-BLUE = (255, 255, 255)
+BLUE = (0, 200, 255)
 BLACK = (0, 0, 50)
 RED = (255, 0, 0)
-WHITE = (0, 200, 250)
+WHITE = (255, 255, 255)
 
 # FPS
 FPS = 60
@@ -189,8 +189,7 @@ def game_loop():
             high_score_text = font.render(f"Click R to restart.", True, RED)
             screen.blit(high_score_text,(200,200)) 
             keys = pygame.key.get_pressed()
-            print(keys)
-            print(pygame.key.get_focused())
+
             if keys[pygame.K_r]:
                 game = True
                 game_over = False

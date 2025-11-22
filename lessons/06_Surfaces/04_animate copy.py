@@ -21,6 +21,7 @@ class Frog(pygame.sprite.Sprite,):
         self.last_frame = 0
         self.direction_vector = pygame.math.Vector2(100, 0)  # Initial direction vector
         self.position = pygame.math.Vector2()
+        self.jumped = False
         #slef.image
         #self.rect
     def update(self):
@@ -39,10 +40,13 @@ class Alligator(pygame.sprite.Sprite):
         self.allig_sprites = scale_sprites(spritesheet.load_strip( (0,4), 7, colorkey=-1), 4)
         self.allig_index = 0
         self.frame_count = 1
+        self.rect = self.allig_sprites[0].get_rect(center=(100, 100))
         self.frames_per_image = 100
         
         if self.frame_count % self.frames_per_image == 0: 
             self.allig_index = (self.allig_index + 1) % len(self.allig_sprites)
+
+    
     def draw_alligator(self, alligator, index):
 
         """Creates a composed image of the alligator sprites.
@@ -115,8 +119,19 @@ def main():
         screen.fill((0, 0, 139))  # Clear screen with deep blue
 
         # Update animation every few frames
+        alligx = alligator.rect.x
+        alligy = alligator.rect.y
+        frogx = frog.rect.x
+        frogy = alligator.rect.y
 
-        
+        if alligx < frogx:
+            alligator.rect.x += 15
+        elif alligx > frogx:
+            alligator.rect.x -= 15
+        if alligy < frogy:
+            alligator.rect.y += 15
+        elif alligy > frogy:
+            alligator.rect.y -= 15
         # Get the current sprite and display it in the middle of the screen
         pygame.draw.line(screen, (0, 0, 120), frog.position, (100, 2))
         #it's complaining about the '100,' dunno how to fix
@@ -135,7 +150,7 @@ def main():
 
         # Handle events
         for event in pygame.event.get():
-
+ 
             if event.type == pygame.QUIT:
                     running = False
         #arrow key movemnt to go here
@@ -149,10 +164,14 @@ def main():
             frog.direction_vector.scale_to_length(frog.direction_vector.length()-1.0)
         elif keys[pygame.K_UP]:
             frog.direction_vector.scale_to_length(frog.direction_vector.length()+1.0)
-        elif keys[pygame.K_SPACE]:
+        
+        if keys[pygame.K_SPACE] and frog.jumped == False:
             frog.rect.x += frog.direction_vector[0]
             frog.rect.y += frog.direction_vector[1]
-
+            frog.jumped = True
+        elif not keys[pygame.K_SPACE]:
+            frog.jumped = False
+             
 
         # Cap the frame rate
         pygame.time.Clock().tick(60)
