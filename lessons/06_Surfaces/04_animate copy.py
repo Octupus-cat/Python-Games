@@ -40,6 +40,7 @@ class Alligator(pygame.sprite.Sprite):
         self.allig_sprites = scale_sprites(spritesheet.load_strip( (0,4), 7, colorkey=-1), 4)
         self.allig_index = 0
         self.frame_count = 1
+        self.last_frame = 0
         self.rect = self.allig_sprites[0].get_rect(center=(100, 100))
         self.frames_per_image = 100
         
@@ -69,7 +70,12 @@ class Alligator(pygame.sprite.Sprite):
         composed_image.blit(alligator[(index + 2) % len(alligator)], (width * 2, 0))
 
         self.image = composed_image
-        return composed_image
+    def update(self):
+        if pygame.time.get_ticks() - self.last_frame > 200: 
+            self.allig_index = (self.allig_index + 1) % len(self.allig_sprites)
+            self.draw_alligator(self.allig_sprites, self.allig_index)
+
+
     # to do: add all the aligator stuff to this class!!!
 
 def scale_sprites(sprites, scale):
@@ -114,7 +120,7 @@ def main():
     frog = Frog()
     alligator = Alligator()
     frog_group = pygame.sprite.GroupSingle(frog)
-    allig_group = pygame.sprite.GroupSingle(alligator)
+    alligator_group = pygame.sprite.GroupSingle(alligator)
     while running:
         screen.fill((0, 0, 139))  # Clear screen with deep blue
 
@@ -137,10 +143,8 @@ def main():
         #it's complaining about the '100,' dunno how to fix
         frog.update()
         frog_group.draw(screen)
-
-        composed_alligator = alligator.draw_alligator(alligator.allig_sprites, alligator.allig_index)
-        screen.blit(composed_alligator,  sprite_rect.move(0, 100))
-
+        alligator.update()
+        alligator_group.draw()
         screen.blit(log,  sprite_rect.move(0, -100))
         pygame.draw.line(screen, (52, 137, 235), (frog.rect.x, frog.rect.y), (frog.rect.x + frog.direction_vector[0], frog.rect.y + frog.direction_vector[1]), 2)
 
