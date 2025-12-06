@@ -41,6 +41,7 @@ class Alligator(pygame.sprite.Sprite):
         self.allig_index = 0
         self.frame_count = 1
         self.last_frame = 0
+        self.draw_alligator(self.allig_sprites,self.allig_index)
         self.rect = self.allig_sprites[0].get_rect(center=(100, 100))
         self.frames_per_image = 100
         
@@ -70,10 +71,11 @@ class Alligator(pygame.sprite.Sprite):
         composed_image.blit(alligator[(index + 2) % len(alligator)], (width * 2, 0))
 
         self.image = composed_image
-    def update(self):
+    def update(self, frog):
         if pygame.time.get_ticks() - self.last_frame > 200: 
             self.allig_index = (self.allig_index + 1) % len(self.allig_sprites)
             self.draw_alligator(self.allig_sprites, self.allig_index)
+        new_pos = pygame.Vector2(self.rect.y, self.rect.x).move_towards_ip(pygame.Vector2(frog.rect.y, frog.rect.x),1)
 
 
     # to do: add all the aligator stuff to this class!!!
@@ -143,8 +145,8 @@ def main():
         #it's complaining about the '100,' dunno how to fix
         frog.update()
         frog_group.draw(screen)
-        alligator.update()
-        alligator_group.draw()
+        alligator.update(frog)
+        alligator_group.draw(screen)
         screen.blit(log,  sprite_rect.move(0, -100))
         pygame.draw.line(screen, (52, 137, 235), (frog.rect.x, frog.rect.y), (frog.rect.x + frog.direction_vector[0], frog.rect.y + frog.direction_vector[1]), 2)
 
