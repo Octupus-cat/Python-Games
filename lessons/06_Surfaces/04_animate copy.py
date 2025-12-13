@@ -43,6 +43,8 @@ class Alligator(pygame.sprite.Sprite):
         self.last_frame = 0
         self.draw_alligator(self.allig_sprites,self.allig_index)
         self.rect = self.allig_sprites[0].get_rect(center=(100, 100))
+        self.rect.x = 0
+        self.rect.y = 600
         self.frames_per_image = 100
         
         if self.frame_count % self.frames_per_image == 0: 
@@ -130,16 +132,17 @@ def main():
         alligx = alligator.rect.x
         alligy = alligator.rect.y
         frogx = frog.rect.x
-        frogy = alligator.rect.y
+        frogy = frog.rect.y
 
         if alligx < frogx:
-            alligator.rect.x += 15
+            alligator.rect.x += 0.8
         elif alligx > frogx:
-            alligator.rect.x -= 15
+            alligator.rect.x -= 0.8
+
         if alligy < frogy:
-            alligator.rect.y += 15
+            alligator.rect.y += 0.8
         elif alligy > frogy:
-            alligator.rect.y -= 15
+            alligator.rect.y -= 0.8
         # Get the current sprite and display it in the middle of the screen
         pygame.draw.line(screen, (0, 0, 120), frog.position, (100, 2))
         #it's complaining about the '100,' dunno how to fix
@@ -178,6 +181,10 @@ def main():
         elif not keys[pygame.K_SPACE]:
             frog.jumped = False
              
+        collider = pygame.sprite.spritecollide(frog, alligator_group, dokill=False)
+        if collider:
+            collider[0].explode()
+            game_over = True
 
         # Cap the frame rate
         pygame.time.Clock().tick(60)
@@ -185,12 +192,6 @@ def main():
     # Quit Pygame
     pygame.quit()
 
-### Might not work, might be in wrong place
-    collider = pygame.sprite.spritecollide(Frog, Alligator, dokill=False)
-    if collider:
-        collider[0].explode()
-        game_over = True
-### Might be totally wrong
 
 if __name__ == "__main__":
     main()
