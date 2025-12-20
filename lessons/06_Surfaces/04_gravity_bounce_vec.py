@@ -7,9 +7,15 @@ understandable, and makes it easier to add more complex features to the game.
 
 
 """
+
+#next class i have to make the player part of a single group to try to make the rectangle look like a frog
+
 import pygame
 from dataclasses import dataclass
+from pathlib import Path
+from jtlgames.spritesheet import SpriteSheet
 
+images = Path(__file__).parent / 'images'
 
 class Colors:
     """Constants for Colors"""
@@ -19,6 +25,22 @@ class Colors:
     PLAYER_COLOR = (0, 0, 100)
     BACKGROUND_COLOR = (255, 255, 255)
 
+filename = images / 'spritesheet.png'  # Replace with your actual file path
+cellsize = (16, 16)  # Replace with the size of your sprites
+ss = SpriteSheet(filename, cellsize)
+spritesheet = SpriteSheet(filename, cellsize)
+
+def scale_sprites(sprites, scale):
+    """Scale a list of sprites by a given factor.
+
+    Args:
+        sprites (list): List of pygame.Surface objects.
+        scale (int): Scale factor.
+
+    Returns:
+        list: List of scaled pygame.Surface objects.
+    """
+    return [pygame.transform.scale(sprite, (sprite.get_width() * scale, sprite.get_height() * scale)) for sprite in sprites]
 
 @dataclass
 class GameSettings:
@@ -72,10 +94,16 @@ class Game:
         pygame.quit()
 
 
-class Player:
+class Player(pygame.sprite.Sprite):
     """Player class, just a bouncing rectangle"""
+    # NOPE it's a FROG now!
 
     def __init__(self, game: Game):
+        super().__init__()
+        self.frog_sprites = scale_sprites(spritesheet.load_strip(0, 4, colorkey=-1) , 4)
+        self.image = self.frog_sprites[0]
+        self.rect = self.frog_sprites[0].get_rect(center=(100, 100))
+
         self.game = game
         settings = self.game.settings
 
@@ -191,9 +219,8 @@ class Player:
             self.vel += self.v_jump
          
 
-    def draw(self, screen):
-        pygame.draw.rect(screen, Colors.PLAYER_COLOR, (self.pos.x, self.pos.y, self.width, self.height))
 
+    #maybe put how to draw image of frog here?
 
 settings = GameSettings()
 game = Game(settings)
