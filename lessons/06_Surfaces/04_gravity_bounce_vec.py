@@ -78,6 +78,7 @@ class Game:
     def run(self):
         """Main game loop"""
         player = Player(self)
+        player_group = pygame.sprite.GroupSingle(player)
 
         while self.running:
             for event in pygame.event.get():
@@ -87,12 +88,18 @@ class Game:
             player.update()
 
             self.screen.fill(Colors.BACKGROUND_COLOR)
-            player.draw(self.screen)
+            player_group.draw(self.screen)
             pygame.display.flip()
             self.clock.tick(self.settings.frame_rate)
 
         pygame.quit()
 
+grid = []
+for y in range(0, Game.screen.get_height(), 48):
+    for x in range(0, Game.screen.get_width(), 48):
+        grid.append((x, y))
+    print(len(grid))
+ 
 
 class Player(pygame.sprite.Sprite):
     """Player class, just a bouncing rectangle"""
@@ -169,7 +176,11 @@ class Player(pygame.sprite.Sprite):
         self.update_jump()
         self.update_v()
         self.update_pos()
-        
+        self.rect.x = self.pos.x
+        self.rect.y = self.pos.y
+
+        #self.frog_sprites = pygame.transform.scale(self.image, (64 * (1+abs(self.vel.x)), 64 * (1+abs(self.vel.y))))
+
     def update_v(self):
         """Update the player's velocity based on gravity and bounce on edges"""
          
@@ -215,12 +226,11 @@ class Player(pygame.sprite.Sprite):
         
         # Notice that we've gotten rid of self.is_jumping, because we can just
         # check if the player is at the bottom. 
-        if self.at_bottom():
-            self.vel += self.v_jump
-         
 
-
-    #maybe put how to draw image of frog here?
+if self.at_bottom():
+    self.vel += self.v_jump
+    frog4x =  pygame.transform.scale_by(player, 3)
+    screen.blit(frog4x, grid[43])
 
 settings = GameSettings()
 game = Game(settings)
