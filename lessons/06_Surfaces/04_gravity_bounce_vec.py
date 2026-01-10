@@ -77,6 +77,13 @@ class Game:
 
     def run(self):
         """Main game loop"""
+
+        grid = []
+        for y in range(0, self.screen.get_height(), 48):
+            for x in range(0, self.screen.get_width(), 48):
+                grid.append((x, y))
+            print(len(grid))
+    
         player = Player(self)
         player_group = pygame.sprite.GroupSingle(player)
 
@@ -87,19 +94,17 @@ class Game:
 
             player.update()
 
+            if player.at_bottom():
+                player.vel += player.v_jump
+                player.image =  pygame.transform.scale_by(player.image, 3)
+
             self.screen.fill(Colors.BACKGROUND_COLOR)
             player_group.draw(self.screen)
             pygame.display.flip()
             self.clock.tick(self.settings.frame_rate)
 
         pygame.quit()
-
-grid = []
-for y in range(0, Game.screen.get_height(), 48):
-    for x in range(0, Game.screen.get_width(), 48):
-        grid.append((x, y))
-    print(len(grid))
- 
+   
 
 class Player(pygame.sprite.Sprite):
     """Player class, just a bouncing rectangle"""
@@ -227,10 +232,6 @@ class Player(pygame.sprite.Sprite):
         # Notice that we've gotten rid of self.is_jumping, because we can just
         # check if the player is at the bottom. 
 
-if self.at_bottom():
-    self.vel += self.v_jump
-    frog4x =  pygame.transform.scale_by(player, 3)
-    screen.blit(frog4x, grid[43])
 
 settings = GameSettings()
 game = Game(settings)
