@@ -1,14 +1,17 @@
 #!/bin/bash
+set -x
 
-pip3 install --upgrade pip
-pip3 install  -r requirements.txt
+TARGET_DIR=$1
+THIS_DIR=$(dirname "$(realpath "$0")")
 
-git config --global pull.rebase true
+echo "❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖❖"
+echo "TARGET_DIR: $TARGET_DIR"
+echo "THIS_DIR: $THIS_DIR"
 
-echo "export PYTHONPATH=$(pwd)/.lib/:$PYTHONPATH" >> ~/.zshrc
+cd $TARGET_DIR
+
+pip install -r requirements.txt
+
+# Put a newline in the prompt to make it easier to read.
 echo "export PYTHONPATH=$(pwd)/.lib/:$PYTHONPATH" >> ~/.bashrc
-echo "export PYTHONPATH=$(pwd)/.lib/:$PYTHONPATH" >> ~/.profile
-
-source ~/.bashrc
-
 

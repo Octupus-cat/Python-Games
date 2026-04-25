@@ -21,7 +21,6 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Dino Jump")
 
 # Colors
-BLUE = (0, 200, 255)
 BLACK = (0, 0, 50)
 RED = (255, 0, 0)
 WHITE = (255, 255, 255)
@@ -181,7 +180,7 @@ def game_loop():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     quit()
-            screen.fill(BLUE)
+            screen.fill(WHITE)
             game_over_text = font.render(f"GAME OVER!", True, RED)
             screen.blit(game_over_text,(5,0))
             high_score_text = font.render(f"Final Score: {obstacle_count}", True, RED)
